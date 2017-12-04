@@ -1,0 +1,16 @@
+<div class="navbar-fixed">
+  <nav>
+    <div class="nav-wrapper grey darken-2">
+      <a href="#" class="brand-logo">Basic Wall</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a [routerLink]="['']">Home</a></li>
+        <li><a [routerLink]="['wall']">Wall</a></li>
+      </ul>
+      <a href="#" materialize="sideNav" data-activates="nav-mobile" class="button-collapse right" (click)="sideNav()"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+</div>
+<ul id="nav-mobile" class="side-nav hide-on-med-and-up">
+  <li><a [routerLink]="['']" (click)="sideNavClose()">Home</a></li>
+  <li><a [routerLink]="['wall']" (click)="sideNavClose()">Wall</a></li>
+</ul>

@@ -1,0 +1,141 @@
+<div class="green center" id='fixedTop'>
+  <flash-messages class="white-text"></flash-messages>
+</div>
+
+<section id="addPost">
+  <div class="parallax-container">
+    <div class="section"></div>
+    <div class="container center-align" id="opacity">
+      <div class="section"></div>
+      <h4 class='flow-text'>Post Here:</h4>
+      <div class="row">
+        <form (submit)='onSubmit()' #formData='ngForm' class='col s12'>
+          <div class="row">
+            <div class="input-field col s4 push-s4">
+              <input id="name" type="text" name='name' class='validate' required [(ngModel)]='post.name' #name='ngModel'>
+              <label for="name" data-error="Name is required" data-success="Success" class='center-align'>Name</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s10 push-s1">
+              <input id="text" type="text" class="validate" name="text" required [(ngModel)]='post.text' #text='ngModel'>
+              <label for="text" data-error="Field must not be left empty" data-success="Success">What's on your mind?</label>
+            </div>
+          </div>
+          <div class="row">
+            <button type="submit" value="Post to Wall" class='btn waves-effect waves-light blue' [disabled]='!formData.valid'>
+                <i class="material-icons right">send</i>Post To Wall
+              </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div materialize="parallax">
+      <img class='responsive-img' src="../../assets/img/postit.png">
+    </div>
+  </div>
+</section>
+
+
+<div class="divider"></div>
+<div class="section"></div>
+
+<div class="container">
+  <div class="row" *ngFor='let post of posts'>
+    <div class="col s10">
+      <div class="card grey darken-2">
+        <div class="card-content white-text">
+          <span class="card-title flow-text" id="inlineBlock">{{post.name}} says:</span>
+          <i [attr.data-target]="'delete' + post._id" class="small material-icons grey darken-2 red-text right modal-trigger" id="clickable"
+            (click)="openModal">close</i>
+          <div class="divider"></div>
+          <div class="section"></div>
+          <p>{{post.text}}</p>
+          <div class="section"></div>
+          <p class='right-align'>Posted On: {{post.createdAt | date:'yMMMdjms'}}</p>
+          <p class="right-align"><i id="heart" class="material-icons pink-text">favorite_icon</i>: {{post.likes}}</p>
+          <p class="right-align">Replies: {{post.replies.length}}</p>
+        </div>
+        <div class="card-action center-align">
+          <button id='like-align' class="btn-floating waves-effect waves-light pink" (click)="like(post._id)"><i class="material-icons">favorite_icon</i></button>
+          <button [attr.data-target]="'modal' + post._id" class="waves-effect waves-light btn modal-trigger" (click)="openModal">
+            <i class="material-icons right">send</i>Reply
+          </button>
+          <button class='btn waves-effect waves-light grey' id="slide{{post._id}}" (click)="slide(post._id)"><i class="material-icons right" id="icon{{post._id}}">arrow_upward</i>Hide Replies</button>
+        </div>
+      </div>
+
+      <div id="modal{{post._id}}" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
+        <div class="modal-content">
+          <h5>Reply to {{post.name}}'s Post:</h5>
+          <div id="addCommet">
+            <div class="row">
+              <form (submit)='addReply(post._id)' #formData='ngForm' class='col s12'>
+                <div class="row">
+                  <div class="input-field col s4">
+                    <input id="name" type="text" name='replyName' class='validate' required [(ngModel)]='reply.name' #replyName='ngModel'>
+                    <label for="name" data-error="Name is required" data-success="Success">Name</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input id="text" type="text" class="materialize-textarea validate" name="replyText" required [(ngModel)]='reply.text' #text='ngModel'>
+                    <label for="text" data-error="Field must not be left empty" data-success="Success">What would you like to say to {{post.name}}?</label>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <a class="btn waves-effect waves-light red" (click)="closeModal()">Cancel</a>
+                  <button type="submit" value="Post to Wall" class='btn waves-effect waves-light blue' [disabled]='!formData.valid'>
+                  <i class="material-icons right">send</i>Add Reply
+                </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="delete{{post._id}}" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
+        <div class="modal-content">
+          <h4>Delete {{post.name}}'s Post?</h4>
+          <div class="modal-footer">
+            <button class="btn green" (click)="delete(post._id)">Yes</button>
+            <button class="btn red" (click)="closeModal()">No</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="replies{{post._id}}">
+      <div class="col s10 push-s1" *ngFor="let reply of post.replies">
+        <div class="card grey">
+          <div class="card-content white-text">
+            <span class="card-title flow-text" id="inlineBlock">{{reply.name}} replies:</span>
+            <i [attr.data-target]="'deleteReply' + reply._id" class="small material-icons grey red-text right modal-trigger" id="clickable"
+              (click)="openModal">close</i>
+            <div class="divider"></div>
+            <div class="section"></div>
+            <p>{{reply.text}}</p>
+            <div class="section"></div>
+            <p class='right-align'>Replied to {{post.name}} on: {{reply.createdAt | date:'yMMMdjms'}}</p>
+        </div>
+
+        <div id="deleteReply{{reply._id}}" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
+          <div class="modal-content">
+            <h4>Delete {{reply.name}}'s Reply?</h4>
+            <div class="modal-footer">
+              <button class="btn green" (click)="deleteReply(reply._id)">Yes</button>
+              <button class="btn red" (click)="closeModal()">No</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class='fixed-action-btn'>
+  <button id="toPost" (click)="toPost()" class="btn grey btn-floating"><i class="material-icons">arrow_upward</i></button>
+</div>

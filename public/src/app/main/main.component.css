@@ -1,0 +1,32 @@
+#like-align{
+  padding-left: 7.5px;
+}
+i.material-icons.left{
+  margin-right: 5px;
+}
+#heart{
+  width: 24px;
+  margin-right: 5px;
+}
+.card-content{
+  word-wrap: break-word;
+}
+#opacity{
+  background-color:white;
+  opacity: 0.8;
+  margin-top: 5%;
+}
+#inlineBlock{
+  display: inline-block;
+}
+#clickable{
+  cursor: pointer;
+}
+#fixedTop{
+  position: fixed; /* Set the navbar to fixed position */
+  top: 2; /* Position the navbar at the top of the page */
+  width: 100%; /* Full width */
+  z-index:1000;
+  border-radius: 15px;
+  opacity:0.7;
+}
